@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kamagure — Anime & Games</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #0b0b12;
+      color: #fff;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 6%;
+      background: rgba(11,11,18,.94);
+      border-bottom: 1px solid #242432;
+      backdrop-filter: blur(10px);
+    }
+    .logo {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .logo span { color: #8b5cf6; }
+    nav { display: flex; gap: 22px; }
+    nav a {
+      color: #bbb;
+      text-decoration: none;
+      font-size: 14px;
+      transition: .2s;
+    }
+    nav a:hover { color: #fff; }
+    .search {
+      width: 190px;
+      padding: 10px 14px;
+      border: 1px solid #303040;
+      border-radius: 20px;
+      background: #151520;
+      color: white;
+      outline: none;
+    }
+    .hero {
+      min-height: 430px;
+      padding: 70px 6%;
+      display: flex;
+      align-items: center;
+      background:
+        radial-gradient(circle at 75% 30%, rgba(139,92,246,.32), transparent 35%),
+        linear-gradient(120deg, #11111d, #0b0b12 65%);
+    }
+    .hero-content { max-width: 620px; }
+    .tag {
+      display: inline-block;
+      color: #c4b5fd;
+      background: #221a39;
+      border: 1px solid #45316d;
+      padding: 7px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      margin-bottom: 18px;
+    }
+    h1 {
+      font-size: clamp(42px, 8vw, 72px);
+      line-height: .98;
+      margin-bottom: 18px;
+    }
+    h1 span { color: #8b5cf6; }
+    .hero p {
+      color: #b8b8c7;
+      line-height: 1.6;
+      max-width: 520px;
+      margin-bottom: 25px;
+    }
+    .buttons { display: flex; gap: 12px; flex-wrap: wrap; }
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .primary { background: #8b5cf6; color: white; }
+    .secondary { background: #20202d; color: white; border: 1px solid #343447; }
+    main { padding: 40px 6%; }
+    section { margin-bottom: 48px; }
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .section-title h2 { font-size: 25px; }
+    .section-title a { color: #9b7cff; font-size: 13px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      overflow: hidden;
+      background: #151520;
+      border: 1px solid #272737;
+      border-radius: 14px;
+      transition: transform .2s, border-color .2s;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: #7650d8;
+    }
+    .cover {
+      height: 190px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 12px;
+      font-size: 18px;
+      font-weight: 800;
+      background: #151520;
+    }
+    .cover img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .3s;
+    }
+    .card:hover .cover img { transform: scale(1.06); }
+    .cover::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(transparent 45%, rgba(0,0,0,.9));
+    }
+    .cover span {
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 2px 8px #000;
+    }
+    .info { padding: 12px; }
+    .info h3 { font-size: 16px; margin-bottom: 6px; }
+    .info p { color: #8f8f9f; font-size: 12px; }
+    footer {
+      padding: 30px 6%;
+      text-align: center;
+      color: #777787;
+      border-top: 1px solid #242432;
+      font-size: 13px;
+    }
+
+    .anime-page { margin-bottom: 55px; }
+    .jjk-banner, .hunter-banner {
+      min-height: 300px;
+      border-radius: 18px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 25px;
+      background-size: cover;
+      background-position: center;
+      border: 1px solid #2d2d3e;
+    }
+    .jjk-banner {
+      background-image:
+        linear-gradient(90deg, rgba(8,8,15,.95), rgba(8,8,15,.2)),
+        url("https://jujutsukaisen.jp/assets/img/top/kv.jpg");
+    }
+    .hunter-banner {
+      background-image:
+        linear-gradient(90deg, rgba(8,8,15,.95), rgba(8,8,15,.25)),
+        url("https://cdn.myanimelist.net/images/anime/1337/99013l.jpg");
+    }
+    .jjk-overlay {
+      position: relative;
+      z-index: 1;
+      padding: 42px;
+      max-width: 620px;
+    }
+    .jjk-overlay h2 { font-size: clamp(32px, 6vw, 54px); margin: 10px 0; }
+    .jjk-overlay p { color: #c3c3d0; margin-bottom: 20px; line-height: 1.5; }
+    .news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+    .news-card {
+      background: #151520;
+      border: 1px solid #29293a;
+      border-radius: 14px;
+      padding: 20px;
+      transition: .2s;
+    }
+    .news-card:hover { transform: translateY(-3px); border-color: #7650d8; }
+    .news-date { color: #9b7cff; font-size: 11px; font-weight: 800; margin-bottom: 10px; }
+    .news-card h3 { margin-bottom: 10px; }
+    .news-card p { color: #aaaabd; line-height: 1.55; font-size: 14px; margin-bottom: 15px; }
+    .news-card a { color: #b39cff; text-decoration: none; font-size: 13px; font-weight: 700; }
+    .soon { color: #9b7cff; font-size: 12px; border: 1px solid #4a376e; padding: 6px 10px; border-radius: 15px; }
+
+
+    .clickable { cursor: pointer; }
+    .clickable:focus { outline: 2px solid #8b5cf6; outline-offset: 3px; }
+    .open-label {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      z-index: 2;
+      font-size: 10px;
+      background: rgba(139,92,246,.9);
+      padding: 5px 8px;
+      border-radius: 8px;
+      opacity: 0;
+      transition: .2s;
+    }
+    .clickable:hover .open-label { opacity: 1; }
+    .jjk-full-page { padding: 20px 6% 50px; }
+    .jjk-full-page[hidden] { display: none; }
+    .back-btn {
+      background: #20202d;
+      color: white;
+      border: 1px solid #343447;
+      margin-bottom: 18px;
+    }
+    .jjk-hero {
+      min-height: 340px;
+      border-radius: 18px;
+      display: flex;
+      align-items: flex-end;
+      padding: 42px;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(7,7,13,.95), rgba(7,7,13,.18)),
+        url("https://jujutsukaisen.jp/assets/img/top/kv.jpg") center/cover;
+      border: 1px solid #2d2d3e;
+      margin-bottom: 30px;
+    }
+    .jjk-hero h2 { font-size: clamp(38px, 7vw, 65px); margin: 10px 0; }
+    .jjk-hero p { color: #c4c4d0; }
+    .character-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+      gap: 16px;
+    }
+    .character-card {
+      background: #151520;
+      border: 1px solid #29293a;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .character-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      display: block;
+      background: #20202d;
+    }
+    .character-card h3 { padding: 12px 12px 3px; }
+    .character-card p { padding: 0 12px 14px; color: #9090a0; font-size: 12px; }
+    .hunter-hero {
+      min-height: 340px;
+      border-radius: 18px;
+      display: flex;
+      align-items: flex-end;
+      padding: 42px;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(7,7,13,.95), rgba(7,7,13,.18)),
+        url("https://cdn.myanimelist.net/images/anime/1337/99013l.jpg") center/cover;
+      border: 1px solid #2d2d3e;
+      margin-bottom: 30px;
+    }
+    .hunter-hero h2 { font-size: clamp(38px, 7vw, 65px); margin: 10px 0; }
+    .hunter-hero p { color: #c4c4d0; }
+
+
+
+    .character-card img {
+      width: 100%;
+      height: 190px;
+      object-fit: contain;
+      display: block;
+      background: #20202d;
+    }
+    .simple-hero {
+      min-height: 300px;
+      border-radius: 18px;
+      display: flex;
+      align-items: flex-end;
+      padding: 40px;
+      overflow: hidden;
+      border: 1px solid #2d2d3e;
+      margin-bottom: 30px;
+      background-size: cover;
+      background-position: center;
+    }
+    .simple-hero h2 { font-size: clamp(38px, 7vw, 62px); margin: 10px 0; }
+    .simple-hero p { color: #c4c4d0; }
+    .onepiece-hero {
+      background-image: linear-gradient(90deg, rgba(7,7,13,.92), rgba(7,7,13,.18)),
+        url("https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg");
+    }
+    .genshin-hero {
+      background-image: linear-gradient(90deg, rgba(7,7,13,.92), rgba(7,7,13,.18)),
+        url("https://webstatic.hoyoverse.com/upload/op-public/2022/12/07/8b2f4e3f8c4d0d0d5b1e9f0b0d0c8e4e_2e6d3f5c8d1e0b2a3c4d5e6f7a8b9c0d.jpg");
+    }
+
+    #noResults {
+      display: none;
+      text-align: center;
+      color: #aaa;
+      padding: 20px;
+      margin-bottom: 20px;
+      background: #151520;
+      border: 1px solid #272737;
+      border-radius: 12px;
+    }
+    .search-box { position: relative; display: flex; align-items: center; }
+    .search-box .search { padding-right: 34px; }
+    #clearSearch {
+      position: absolute;
+      right: 5px;
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: #888;
+      font-size: 20px;
+      display: none;
+    }
+    #clearSearch:hover { color: #fff; background: #29293a; }
+
+    #message {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #242432;
+      padding: 12px 18px;
+      border-radius: 10px;
+      display: none;
+      border: 1px solid #3a3a4d;
+    }
+
+    .category-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin: 0 0 35px; }
+    .category-box { min-height:150px; border:1px solid #303044; border-radius:18px; background:linear-gradient(135deg,#171725,#101018); display:flex; align-items:center; justify-content:center; text-align:center; cursor:pointer; transition:.2s; padding:20px; }
+    .category-box:hover { transform:translateY(-3px); border-color:#8b5cf6; background:#1b1b2b; }
+    .category-box h3 { font-size:24px; margin:0; }
+    .category-box p { color:#9292a4; margin:8px 0 0; font-size:13px; }
+    .category-view[hidden] { display:none; }
+    .category-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin:20px 0; }
+    .category-head button { background:#242437; color:#fff; border:1px solid #39394e; border-radius:10px; padding:10px 14px; cursor:pointer; }
+    .empty-category { background:#151520; border:1px solid #29293a; border-radius:18px; padding:60px 24px; text-align:center; margin-bottom:30px; }
+    .empty-icon { font-size:48px; margin-bottom:10px; }
+    .empty-category h3 { font-size:26px; margin:8px 0; }
+    .empty-category p { color:#9292a4; max-width:520px; margin:0 auto; }
+    @media (max-width:700px){ .category-grid{grid-template-columns:1fr 1fr; gap:12px;} .category-box{min-height:125px;} .category-box h3{font-size:18px;} }
+    @media (max-width: 700px) {
+      header { flex-wrap: wrap; gap: 12px; }
+      nav { order: 3; width: 100%; justify-content: center; }
+      .search { width: 170px; }
+      .hero { min-height: 390px; padding-top: 55px; }
+      .cover { height: 165px; }
+      .jjk-overlay { padding: 28px; }
+      .jjk-banner, .hunter-banner { min-height: 270px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Anime<span>Play</span></div>
+  <nav>
+    <a href="#inicio">Início</a>
+    <a href="#" onclick="openCategory('animes-view');return false;">Animes</a>
+    <a href="#" onclick="openCategory('jogos-view');return false;">Jogos</a>
+    <a href="#favoritos">Favoritos</a>
+  </nav>
+  <div class="search-box"><input class="search" id="search" type="search" placeholder="Pesquisar anime ou jogo..."><button id="clearSearch" title="Limpar pesquisa">×</button></div>
+</header>
+
+<section class="hero" id="inicio">
+  <div class="hero-content">
+    <div class="tag">🌸 ANIME • 🎮 GAMES</div>
+    <h1>Seu universo de <span>anime</span> e jogos.</h1>
+    <p>
+      Descubra animes, personagens, jogos e novidades em um só lugar.
+      O seu universo de anime e jogos, em um só lugar.
+    </p>
+    <div class="buttons">
+      <button class="primary" onclick="openCategory('animes-view')">Explorar animes</button>
+      <button class="secondary" onclick="openCategory('jogos-view')">Ver jogos</button>
+    </div>
+  </div>
+</section>
+
+<main>
+  <div id="category-home">
+    <div class="section-title"><h2>✨ Explore o Anime Play</h2></div>
+    <div class="category-grid">
+      <div class="category-box" onclick="openCategory('animes-view')"><div><h3>🎌 Animes</h3><p>Veja os animes disponíveis</p></div></div>
+      <div class="category-box" onclick="openCategory('jogos-view')"><div><h3>🎮 Jogos</h3><p>Explore os jogos</p></div></div>
+      <div class="category-box" onclick="openCategory('dev-view')"><div><h3>🔨 Em desenvolvimento</h3><p>Projetos que estão sendo preparados</p></div></div>
+      <div class="category-box" onclick="openCategory('soon-view')"><div><h3>🔒 Em breve</h3><p>Novidades que chegarão depois</p></div></div>
+    </div>
+  </div>
+
+  <div id="animes-view" class="category-view" hidden>
+    <div class="category-head"><h2>🎌 Animes</h2><button onclick="closeCategory()">← Voltar</button></div>
+    <section id="animes">
+    <div class="section-title">
+      <h2>🔥 Animes em destaque</h2>
+      <a href="#">Ver todos</a>
+    </div>
+    <div class="grid">
+      <article class="card clickable" onclick="openJJK()" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \')openJJK()"><div class="cover"><img src="https://eveofficial-kaikaikitan.com/img/tiup-image.jpg" alt="Capa de Jujutsu Kaisen" loading="lazy"><span>Jujutsu Kaisen</span><b class="open-label">ABRIR</b></div><div class="info"><h3>Jujutsu Kaisen</h3><p>Ação • Sobrenatural</p></div></article>
+      <article class="card clickable" onclick="openHunter()" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \')openHunter()"><div class="cover"><img src="https://i.ebayimg.com/images/g/MoUAAOSwJyJfjbNs/s-l1200.jpg" alt="Capa de Hunter x Hunter" loading="lazy"><span>Hunter x Hunter</span><b class="open-label">ABRIR</b></div><div class="info"><h3>Hunter x Hunter</h3><p>Aventura • Fantasia</p></div></article>
+      <article class="card clickable" onclick="openOnePiece()" role="button" tabindex="0"><div class="cover"><img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg" alt="Capa de One Piece" loading="lazy"><span>One Piece</span><b class="open-label">ABRIR</b></div><div class="info"><h3>One Piece</h3><p>Aventura • Shounen</p></div></article>
+      <article class="card"><div class="cover"><img src="https://m.media-amazon.com/images/M/MV5BM2M4YzdkMTEtMjUyYy00ZWY0LWI5ODQtNGRkZWQ1MzU5MWM2XkEyXkFqcGc%40._V1_Ratio0.6751_AL_.jpg" alt="Capa de Solo Leveling" loading="lazy"><span>Solo Leveling</span></div><div class="info"><h3>Solo Leveling</h3><p>Ação • Fantasia</p></div></article>
+    </div>
+    </section>
+  </div>
+
+  <div id="jogos-view" class="category-view" hidden>
+    <div class="category-head"><h2>🎮 Jogos</h2><button onclick="closeCategory()">← Voltar</button></div>
+<section id="jogos">
+    <div class="section-title">
+      <h2>🎮 Jogos em destaque</h2>
+      <a href="#">Ver todos</a>
+    </div>
+    <div class="grid">
+      <article class="card clickable" onclick="openGenshin()" role="button" tabindex="0"><div class="cover"><img src="https://upload.wikimedia.org/wikipedia/en/5/5d/Genshin_Impact_logo.svg" alt="Genshin Impact" loading="lazy"><span>Genshin Impact</span><b class="open-label">ABRIR</b></div><div class="info"><h3>Genshin Impact</h3><p>RPG • Aventura</p></div></article>
+      <article class="card"><div class="cover">Zenless Zone Zero</div><div class="info"><h3>Zenless Zone Zero</h3><p>RPG • Ação</p></div></article>
+      <article class="card"><div class="cover">Minecraft</div><div class="info"><h3>Minecraft</h3><p>Sandbox • Sobrevivência</p></div></article>
+      <article class="card"><div class="cover">Roblox</div><div class="info"><h3>Roblox</h3><p>Plataforma • Multiplayer</p></div></article>
+    </div>
+  </section>
+  </div>
+
+  <div id="dev-view" class="category-view" hidden>
+    <div class="category-head"><h2>🔨 Em desenvolvimento</h2><button onclick="closeCategory()">← Voltar</button></div>
+    <div class="empty-category"><div class="empty-icon">🛠️</div><h3>Estamos preparando novidades</h3><p>Novos conteúdos e recursos do Anime Play estão sendo desenvolvidos.</p></div>
+  </div>
+
+  <div id="soon-view" class="category-view" hidden>
+    <div class="category-head"><h2>🔒 Em breve</h2><button onclick="closeCategory()">← Voltar</button></div>
+    <div class="empty-category"><div class="empty-icon">✨</div><h3>Novidades chegando</h3><p>Fique de olho. Em breve teremos mais animes, jogos e novidades por aqui.</p></div>
+  </div>
+</main>
+
+
+<section id="jjk-page" class="jjk-full-page" hidden>
+  <button class="back-btn" onclick="closeJJK()">← Voltar para animes</button>
+  <div class="jjk-hero">
+    <div>
+      <span class="tag">JUJUTSU KAISEN</span>
+      <h2>Jujutsu Kaisen</h2>
+      <p>Notícias, novidades e informações do anime em um só lugar.</p>
+    </div>
+  </div>
+
+  <div class="section-title"><h2>📰 Notícias e atualizações</h2><a href="https://jujutsukaisen.jp/" target="_blank" rel="noopener">Site oficial</a></div>
+  <div class="news-grid">
+    <article class="news-card">
+      <div class="news-date">ATUALIZAÇÃO OFICIAL</div>
+      <h3>Novidades de Jujutsu Kaisen</h3>
+      <p>O site oficial reúne notícias, episódios, personagens, vídeos, eventos e outras informações do anime.</p>
+      <a href="https://jujutsukaisen.jp/" target="_blank" rel="noopener">Ver fonte oficial →</a>
+    </article>
+    <article class="news-card">
+      <div class="news-date">CULLING GAME</div>
+      <h3>Novas informações do anime</h3>
+      <p>A página oficial está trazendo atualizações relacionadas ao arco Culling Game e às atividades da série.</p>
+      <a href="https://jujutsukaisen.jp/" target="_blank" rel="noopener">Ver atualizações →</a>
+    </article>
+  </div>
+
+  <div class="section-title"><h2>👤 Personagens</h2></div>
+  <div class="character-grid">
+    <div class="character-card"><img src="https://jujutsu-kaisen.fandom.com/wiki/Special:Redirect/file/Yuji_Itadori_(Anime_2).png" loading="lazy" alt="Yuji Itadori"><h3>Yuji Itadori</h3><p>Protagonista</p></div>
+    <div class="character-card"><img src="https://jujutsu-kaisen.fandom.com/wiki/Special:Redirect/file/Megumi_Fushiguro_(Anime_2).png" loading="lazy" alt="Megumi Fushiguro"><h3>Megumi Fushiguro</h3><p>Feiticeiro jujutsu</p></div>
+    <div class="character-card"><img src="https://jujutsu-kaisen.fandom.com/wiki/Special:Redirect/file/Nobara_Kugisaki_(Anime_2).png" loading="lazy" alt="Nobara Kugisaki"><h3>Nobara Kugisaki</h3><p>Feiticeira jujutsu</p></div>
+    <div class="character-card"><img src="https://jujutsu-kaisen.fandom.com/wiki/Special:Redirect/file/Satoru_Gojo_(Anime_2).png" loading="lazy" alt="Satoru Gojo"><h3>Satoru Gojo</h3><p>Professor</p></div>
+  </div>
+</section>
+
+
+<section id="hunter-page" class="jjk-full-page" hidden>
+  <button class="back-btn" onclick="closeHunter()">← Voltar para animes</button>
+  <div class="hunter-hero">
+    <div>
+      <span class="tag">HUNTER × HUNTER</span>
+      <h2>Hunter x Hunter</h2>
+      <p>Aventura, personagens e novidades do mundo dos Hunters.</p>
+    </div>
+  </div>
+
+  <div class="section-title">
+    <h2>👤 Personagens</h2>
+    <a href="https://www.shonenjump.com/j/rensai/hunter/" target="_blank" rel="noopener">Fonte oficial</a>
+  </div>
+
+  <div class="character-grid">
+    <div class="character-card"><img src="https://s4.anilist.co/file/anilistcdn/character/large/b21110-8x7XkXxYQmQx.png" loading="lazy" alt="Gon Freecss"><h3>Gon Freecss</h3><p>Protagonista</p></div>
+    <div class="character-card"><img src="https://s4.anilist.co/file/anilistcdn/character/large/b27-6KQp2JqvVw3A.png" loading="lazy" alt="Killua Zoldyck"><h3>Killua Zoldyck</h3><p>Amigo de Gon</p></div>
+    <div class="character-card"><img src="https://s4.anilist.co/file/anilistcdn/character/large/b30-5xKpY8gq7mQn.png" loading="lazy" alt="Kurapika"><h3>Kurapika</h3><p>Hunter</p></div>
+    <div class="character-card"><img src="https://s4.anilist.co/file/anilistcdn/character/large/b29-9qLk4zNw8rT1.png" loading="lazy" alt="Leorio"><h3>Leorio</h3><p>Hunter</p></div>
+    <div class="character-card"><img src="https://s4.anilist.co/file/anilistcdn/character/large/b31-3mVx8pQk2sL7.png" loading="lazy" alt="Hisoka"><h3>Hisoka</h3><p>Personagem</p></div>
+  </div>
+
+  <div class="section-title"><h2>📰 Sobre o anime</h2></div>
+  <div class="news-grid">
+    <article class="news-card">
+      <div class="news-date">HUNTER × HUNTER</div>
+      <h3>A jornada de Gon</h3>
+      <p>Gon parte para se tornar um Hunter e encontrar seu pai, conhecendo Killua, Kurapika e Leorio durante a Prova dos Caçadores.</p>
+    </article>
+    <article class="news-card">
+      <div class="news-date">PERSONAGENS</div>
+      <h3>O grupo principal</h3>
+      <p>Gon, Killua, Kurapika e Leorio são apresentados juntos na página oficial de Hunter x Hunter.</p>
+    </article>
+  </div>
+</section>
+
+
+<section id="onepiece-page" class="jjk-full-page" hidden>
+  <button class="back-btn" onclick="closeOnePiece()">← Voltar para animes</button>
+  <div class="simple-hero onepiece-hero">
+    <div><span class="tag">ONE PIECE</span><h2>One Piece</h2><p>Aventura, piratas e novidades da obra.</p></div>
+  </div>
+  <div class="section-title"><h2>📖 Informações</h2></div>
+  <div class="news-grid">
+    <article class="news-card"><h3>Sobre</h3><p>Monkey D. Luffy parte em uma grande aventura pelo mar para encontrar o lendário One Piece e se tornar o Rei dos Piratas.</p></article>
+    <article class="news-card"><h3>Gênero</h3><p>Aventura • Ação • Fantasia • Shounen</p></article>
+  </div>
+</section>
+
+<section id="genshin-page" class="jjk-full-page" hidden>
+  <button class="back-btn" onclick="closeGenshin()">← Voltar para jogos</button>
+  <div class="simple-hero genshin-hero">
+    <div><span class="tag">GENSHIN IMPACT</span><h2>Genshin Impact</h2><p>Explore Teyvat, seus personagens e os sete elementos.</p></div>
+  </div>
+  <div class="section-title"><h2>🎮 Informações do jogo</h2></div>
+  <div class="news-grid">
+    <article class="news-card"><h3>Mundo aberto</h3><p>Genshin Impact é um RPG de ação e aventura em mundo aberto ambientado em Teyvat.</p></article>
+    <article class="news-card"><h3>Sete elementos</h3><p>Anemo, Geo, Electro, Dendro, Hydro, Pyro e Cryo fazem parte do sistema elemental.</p></article>
+  </div>
+</section>
+
+<footer id="favoritos">
+  <p>© 2026 Kamagure • Projeto em construção 🚀</p>
+</footer>
+
+<div id="message"></div>
+
+<script>
+  function showMessage(text) {
+    const box = document.getElementById('message');
+    box.textContent = text;
+    box.style.display = 'block';
+    setTimeout(() => box.style.display = 'none', 1800);
+  }
+
+
+  function openJJK() {
+    document.querySelector('main').style.display = 'none';
+    document.querySelector('#jjk-page').hidden = false;
+    document.querySelector('.hero').style.display = 'none';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+
+
+  function openCategory(id) {
+  document.getElementById('category-home').hidden = true;
+  document.querySelectorAll('.category-view').forEach(v => v.hidden = true);
+  document.getElementById(id).hidden = false;
+  document.querySelector('.hero').style.display = 'none';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function closeCategory() {
+  document.querySelectorAll('.category-view').forEach(v => v.hidden = true);
+  document.getElementById('category-home').hidden = false;
+  document.querySelector('.hero').style.display = '';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function showPage(id) {
+    document.querySelector('main').style.display = 'none';
+    document.querySelector('.hero').style.display = 'none';
+    document.querySelectorAll('.jjk-full-page').forEach(p => p.hidden = true);
+    document.getElementById(id).hidden = false;
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+  function hidePage(id) {
+    document.getElementById(id).hidden = true;
+    document.querySelector('main').style.display = '';
+    document.querySelector('.hero').style.display = '';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+  function openOnePiece(){ showPage('onepiece-page'); }
+  function closeOnePiece(){ hidePage('onepiece-page'); }
+  function openGenshin(){ showPage('genshin-page'); }
+  function closeGenshin(){ hidePage('genshin-page'); }
+
+  function openHunter() {
+    document.querySelector('main').style.display = 'none';
+    document.querySelector('#hunter-page').hidden = false;
+    document.querySelector('.hero').style.display = 'none';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function closeHunter() {
+    document.querySelector('#hunter-page').hidden = true;
+    document.querySelector('main').style.display = '';
+    document.querySelector('.hero').style.display = '';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function closeJJK() {
+    document.querySelector('#jjk-page').hidden = true;
+    document.querySelector('main').style.display = '';
+    document.querySelector('.hero').style.display = '';
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  const search = document.getElementById('search');
+  const clearSearch = document.getElementById('clearSearch');
+  const noResults = document.getElementById('noResults');
+
+  function doSearch() {
+    const term = search.value.trim().toLocaleLowerCase('pt-BR');
+    let visible = 0;
+
+    document.querySelectorAll('.card').forEach(card => {
+      const text = card.innerText.toLocaleLowerCase('pt-BR');
+      const match = !term || text.includes(term);
+      card.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+
+    clearSearch.style.display = term ? 'block' : 'none';
+    noResults.style.display = term && visible === 0 ? 'block' : 'none';
+  }
+
+  search.addEventListener('input', doSearch);
+
+  clearSearch.addEventListener('click', () => {
+    search.value = '';
+    doSearch();
+    search.focus();
+  });
+</script>
+
+</body>
+</html>
