@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kamagure — Anime & Games</title>
+  <title>Anime Play — Anime & Games</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -362,6 +362,43 @@
     .empty-category h3 { font-size:26px; margin:8px 0; }
     .empty-category p { color:#9292a4; max-width:520px; margin:0 auto; }
     @media (max-width:700px){ .category-grid{grid-template-columns:1fr 1fr; gap:12px;} .category-box{min-height:125px;} .category-box h3{font-size:18px;} }
+
+    .catalog-section { margin-bottom: 42px; }
+    .catalog-section .section-title { margin-bottom: 14px; }
+    .catalog-section .section-title h3 { font-size: 21px; }
+    .catalog-section .section-title small { color:#858598; font-size:12px; }
+    .catalog-card { display:flex; flex-direction:column; min-width:0; }
+    .catalog-card .cover { height:220px; }
+    .catalog-card .info { min-height:112px; display:flex; flex-direction:column; }
+    .catalog-card .info p { line-height:1.45; }
+    .card-meta { color:#777789; font-size:11px; margin-top:6px; }
+    .download-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; margin-top:auto; padding:9px 10px; border-radius:9px; background:#8b5cf6; color:#fff; text-decoration:none; font-size:12px; font-weight:800; }
+    .download-btn:hover { background:#9b70ff; }
+    .details-btn { margin-top:8px; background:#242437; color:#fff; border:1px solid #39394e; padding:8px 10px; border-radius:9px; font-size:12px; }
+    .catalog-card .cover img { object-fit:cover; }
+    .catalog-card .open-label { opacity:1; }
+    .game-page-note { color:#9292a4; font-size:12px; margin:-8px 0 20px; }
+    .catalog-tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
+    .catalog-tabs button { background:#191927; color:#c7c7d5; border:1px solid #303044; padding:9px 12px; border-radius:999px; font-size:12px; }
+    .catalog-tabs button.active { background:#8b5cf6; color:#fff; border-color:#8b5cf6; }
+    .catalog-hidden { display:none; }
+    .detail-overlay { position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; padding:18px; background:rgba(4,4,9,.84); backdrop-filter:blur(7px); }
+    .detail-overlay[hidden] { display:none; }
+    .detail-box { width:min(760px,100%); max-height:90vh; overflow:auto; background:#12121d; border:1px solid #39394f; border-radius:20px; box-shadow:0 20px 80px rgba(0,0,0,.5); }
+    .detail-top { display:grid; grid-template-columns:180px 1fr; gap:20px; padding:20px; }
+    .detail-top img { width:180px; height:250px; object-fit:cover; border-radius:13px; background:#20202d; }
+    .detail-top h2 { font-size:30px; margin:8px 0; }
+    .detail-top p { color:#b7b7c6; line-height:1.55; font-size:14px; }
+    .detail-close { float:right; margin:14px 14px 0 0; background:#252536; color:#fff; border:1px solid #3a3a50; padding:8px 12px; }
+    .detail-actions { display:flex; gap:9px; flex-wrap:wrap; margin-top:15px; }
+    .detail-actions a { text-decoration:none; }
+    .detail-info { padding:0 20px 20px; }
+    .detail-info-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; }
+    .detail-info-card { background:#181824; border:1px solid #29293b; border-radius:12px; padding:12px; }
+    .detail-info-card b { display:block; font-size:11px; color:#8f8fa3; margin-bottom:5px; }
+    .detail-info-card span { font-size:13px; }
+    @media(max-width:600px){ .detail-top{grid-template-columns:105px 1fr;gap:14px}.detail-top img{width:105px;height:155px}.detail-top h2{font-size:23px}.catalog-card .cover{height:200px} }
+
     @media (max-width: 700px) {
       header { flex-wrap: wrap; gap: 12px; }
       nav { order: 3; width: 100%; justify-content: center; }
@@ -405,8 +442,8 @@
   <div id="category-home">
     <div class="section-title"><h2>✨ Explore o Anime Play</h2></div>
     <div class="category-grid">
-      <div class="category-box" onclick="openCategory('animes-view')"><div><h3>🎌 Animes</h3><p>Veja os animes disponíveis</p></div></div>
-      <div class="category-box" onclick="openCategory('jogos-view')"><div><h3>🎮 Jogos</h3><p>Explore os jogos</p></div></div>
+      <div class="category-box" onclick="openCategory('animes-view')"><div><h3>🎌 Animes</h3><p>15 animes em 3 grupos</p></div></div>
+      <div class="category-box" onclick="openCategory('jogos-view')"><div><h3>🎮 Jogos</h3><p>15 jogos com acesso oficial</p></div></div>
       <div class="category-box" onclick="openCategory('dev-view')"><div><h3>🔨 Em desenvolvimento</h3><p>Projetos que estão sendo preparados</p></div></div>
       <div class="category-box" onclick="openCategory('soon-view')"><div><h3>🔒 Em breve</h3><p>Novidades que chegarão depois</p></div></div>
     </div>
@@ -414,34 +451,14 @@
 
   <div id="animes-view" class="category-view" hidden>
     <div class="category-head"><h2>🎌 Animes</h2><button onclick="closeCategory()">← Voltar</button></div>
-    <section id="animes">
-    <div class="section-title">
-      <h2>🔥 Animes em destaque</h2>
-      <a href="#">Ver todos</a>
-    </div>
-    <div class="grid">
-      <article class="card clickable" onclick="openJJK()" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \')openJJK()"><div class="cover"><img src="https://eveofficial-kaikaikitan.com/img/tiup-image.jpg" alt="Capa de Jujutsu Kaisen" loading="lazy"><span>Jujutsu Kaisen</span><b class="open-label">ABRIR</b></div><div class="info"><h3>Jujutsu Kaisen</h3><p>Ação • Sobrenatural</p></div></article>
-      <article class="card clickable" onclick="openHunter()" role="button" tabindex="0" onkeydown="if(event.key===\'Enter\'||event.key===\' \')openHunter()"><div class="cover"><img src="https://i.ebayimg.com/images/g/MoUAAOSwJyJfjbNs/s-l1200.jpg" alt="Capa de Hunter x Hunter" loading="lazy"><span>Hunter x Hunter</span><b class="open-label">ABRIR</b></div><div class="info"><h3>Hunter x Hunter</h3><p>Aventura • Fantasia</p></div></article>
-      <article class="card clickable" onclick="openOnePiece()" role="button" tabindex="0"><div class="cover"><img src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg" alt="Capa de One Piece" loading="lazy"><span>One Piece</span><b class="open-label">ABRIR</b></div><div class="info"><h3>One Piece</h3><p>Aventura • Shounen</p></div></article>
-      <article class="card"><div class="cover"><img src="https://m.media-amazon.com/images/M/MV5BM2M4YzdkMTEtMjUyYy00ZWY0LWI5ODQtNGRkZWQ1MzU5MWM2XkEyXkFqcGc%40._V1_Ratio0.6751_AL_.jpg" alt="Capa de Solo Leveling" loading="lazy"><span>Solo Leveling</span></div><div class="info"><h3>Solo Leveling</h3><p>Ação • Fantasia</p></div></article>
-    </div>
-    </section>
+    <p class="game-page-note">15 títulos divididos em novos/atuais, clássicos e antigos.</p>
+    <div id="animeCatalog"></div>
   </div>
 
   <div id="jogos-view" class="category-view" hidden>
     <div class="category-head"><h2>🎮 Jogos</h2><button onclick="closeCategory()">← Voltar</button></div>
-<section id="jogos">
-    <div class="section-title">
-      <h2>🎮 Jogos em destaque</h2>
-      <a href="#">Ver todos</a>
-    </div>
-    <div class="grid">
-      <article class="card clickable" onclick="openGenshin()" role="button" tabindex="0"><div class="cover"><img src="https://upload.wikimedia.org/wikipedia/en/5/5d/Genshin_Impact_logo.svg" alt="Genshin Impact" loading="lazy"><span>Genshin Impact</span><b class="open-label">ABRIR</b></div><div class="info"><h3>Genshin Impact</h3><p>RPG • Aventura</p></div></article>
-      <article class="card"><div class="cover">Zenless Zone Zero</div><div class="info"><h3>Zenless Zone Zero</h3><p>RPG • Ação</p></div></article>
-      <article class="card"><div class="cover">Minecraft</div><div class="info"><h3>Minecraft</h3><p>Sandbox • Sobrevivência</p></div></article>
-      <article class="card"><div class="cover">Roblox</div><div class="info"><h3>Roblox</h3><p>Plataforma • Multiplayer</p></div></article>
-    </div>
-  </section>
+    <p class="game-page-note">15 jogos com botão para a página oficial de download, compra ou instalação.</p>
+    <div id="gameCatalog"></div>
   </div>
 
   <div id="dev-view" class="category-view" hidden>
@@ -555,109 +572,84 @@
   </div>
 </section>
 
+
+<div id="detailOverlay" class="detail-overlay" hidden>
+  <div class="detail-box">
+    <button class="detail-close" onclick="closeDetail()">✕ Fechar</button>
+    <div id="detailContent"></div>
+  </div>
+</div>
+
 <footer id="favoritos">
-  <p>© 2026 Kamagure • Projeto em construção 🚀</p>
+  <p>© 2026 Anime Play • Projeto em construção 🚀</p>
 </footer>
 
 <div id="message"></div>
 
 <script>
-  function showMessage(text) {
-    const box = document.getElementById('message');
-    box.textContent = text;
-    box.style.display = 'block';
-    setTimeout(() => box.style.display = 'none', 1800);
-  }
+function showMessage(text){const box=document.getElementById('message');box.textContent=text;box.style.display='block';setTimeout(()=>box.style.display='none',1800);}
+function openCategory(id){document.getElementById('category-home').hidden=true;document.querySelectorAll('.category-view').forEach(v=>v.hidden=true);document.getElementById(id).hidden=false;document.querySelector('.hero').style.display='none';window.scrollTo({top:0,behavior:'smooth'});}
+function closeCategory(){document.querySelectorAll('.category-view').forEach(v=>v.hidden=true);document.getElementById('category-home').hidden=false;document.querySelector('.hero').style.display='';window.scrollTo({top:0,behavior:'smooth'});}
+function showPage(id){document.querySelector('main').style.display='none';document.querySelector('.hero').style.display='none';document.querySelectorAll('.jjk-full-page').forEach(p=>p.hidden=true);document.getElementById(id).hidden=false;window.scrollTo({top:0,behavior:'smooth'});}
+function hidePage(id){document.getElementById(id).hidden=true;document.querySelector('main').style.display='';document.querySelector('.hero').style.display='';window.scrollTo({top:0,behavior:'smooth'});}
+function openJJK(){showPage('jjk-page')} function closeJJK(){hidePage('jjk-page')}
+function openHunter(){showPage('hunter-page')} function closeHunter(){hidePage('hunter-page')}
+function openOnePiece(){showPage('onepiece-page')} function closeOnePiece(){hidePage('onepiece-page')}
+function openGenshin(){showPage('genshin-page')} function closeGenshin(){hidePage('genshin-page')}
 
+const animeData=[
+ {group:'Novos / atuais',name:'Jujutsu Kaisen',year:'2020–',genre:'Ação • Sobrenatural',desc:'Yuji Itadori entra no mundo dos feiticeiros jujutsu após se tornar hospedeiro de Sukuna.',img:'https://eveofficial-kaikaikitan.com/img/tiup-image.jpg',action:"openJJK()"},
+ {group:'Novos / atuais',name:'Solo Leveling',year:'2024–',genre:'Ação • Fantasia',desc:'Sung Jinwoo começa como um caçador de baixo nível e passa a enfrentar desafios cada vez maiores.',img:'https://media.senscritique.com/media/000021856658/0/solo_leveling.jpg'},
+ {group:'Novos / atuais',name:'Frieren: Beyond Journey’s End',year:'2023–',genre:'Fantasia • Aventura',desc:'Após a aventura contra o Rei Demônio, Frieren inicia uma nova jornada para compreender melhor os vínculos humanos.',img:'https://spice.eplus.jp/images/I2HI56CSue9S0EiRoD7GSJm0waYDkE07W02sXjlremL51smqIYLLbezbOCJU3GEM/'},
+ {group:'Novos / atuais',name:'Dandadan',year:'2024–',genre:'Fantasia • Ficção científica',desc:'Momo acredita em espíritos e Okarun acredita em alienígenas; um desafio coloca os dois diante do sobrenatural.',img:'https://media.senscritique.com/media/000022119830/0/dandadan.webp'},
+ {group:'Novos / atuais',name:'Kaiju No. 8',year:'2024–',genre:'Ação • Ficção científica',desc:'Kafka Hibino sonha em entrar na Força de Defesa enquanto enfrenta o surgimento de criaturas gigantes.',img:'https://media.senscritique.com/media/000023096895/0/kaiju_no_8.jpg'},
+ {group:'Clássicos',name:'One Piece',year:'1999–',genre:'Aventura • Shounen',desc:'Luffy e sua tripulação atravessam o mar em busca do lendário tesouro One Piece.',img:'https://media.senscritique.com/media/000005351225/0/one_piece.jpg',action:"openOnePiece()"},
+ {group:'Clássicos',name:'Naruto',year:'2002–2007',genre:'Ação • Ninja',desc:'Naruto Uzumaki busca reconhecimento na Vila da Folha e sonha em se tornar Hokage.',img:'https://media.senscritique.com/media/000006480919/0/naruto.jpg'},
+ {group:'Clássicos',name:'Bleach',year:'2004–2012',genre:'Ação • Sobrenatural',desc:'Ichigo Kurosaki passa a combater espíritos perigosos depois de receber poderes de Shinigami.',img:'https://media.senscritique.com/media/000000058337/0/bleach.jpg'},
+ {group:'Clássicos',name:'Hunter x Hunter',year:'2011',genre:'Aventura • Fantasia',desc:'Gon parte para se tornar Hunter e encontrar seu pai, formando laços com Killua, Kurapika e Leorio.',img:'https://media.s-bol.com/x6NKLoD3wVO9/550x825.jpg',action:"openHunter()"},
+ {group:'Clássicos',name:'Dragon Ball Z',year:'1989–1996',genre:'Ação • Artes marciais',desc:'Goku e seus aliados enfrentam ameaças cada vez maiores enquanto descobrem mais sobre os Saiyajins.',img:'https://image.tmdb.org/t/p/original/yQnCeADBmbPJJHKOs3XPVk8PwCO.jpg'},
+ {group:'Antigos',name:'Yu Yu Hakusho',year:'1992–1995',genre:'Ação • Sobrenatural',desc:'Yusuke se torna detetive espiritual e passa a investigar casos ligados ao mundo sobrenatural.',img:'https://videolibrarian.com/downloads/6705/download/Yu%20Yu%20Hakusho%20Season%20One_P.jpg?cb=2b9afebe194a6e9f0094f8b87089042c'},
+ {group:'Antigos',name:'Cowboy Bebop',year:'1998',genre:'Ficção científica • Ação',desc:'Spike Spiegel e a tripulação da nave Bebop vivem aventuras enquanto trabalham como caçadores de recompensas.',img:'https://media.senscritique.com/media/000006478173/0/cowboy_bebop.jpg'},
+ {group:'Antigos',name:'InuYasha',year:'2000–2010',genre:'Fantasia • Aventura',desc:'Kagome viaja ao Japão feudal e conhece Inuyasha em uma busca ligada à Joia de Quatro Almas.',img:'https://media.senscritique.com/media/000006484578/0/inuyasha.jpg'},
+ {group:'Antigos',name:'Sailor Moon',year:'1992–1997',genre:'Fantasia • Ação',desc:'Usagi Tsukino descobre seus poderes e passa a proteger a Terra ao lado das Sailor Guardians.',img:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Marco_Albiero_Sailor_Moon.JPG'},
+ {group:'Antigos',name:'Neon Genesis Evangelion',year:'1995–1996',genre:'Ficção científica • Drama',desc:'Shinji e outros jovens pilotos são envolvidos na defesa da humanidade contra os Angels.',img:'https://media.senscritique.com/media/000006481320/0/neon_genesis_evangelion.jpg'}
+];
 
-  function openJJK() {
-    document.querySelector('main').style.display = 'none';
-    document.querySelector('#jjk-page').hidden = false;
-    document.querySelector('.hero').style.display = 'none';
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
+const gameData=[
+ {group:'Novos / atuais',name:'Genshin Impact',year:'2020–',genre:'RPG • Mundo aberto',desc:'Explore Teyvat, viaje entre regiões e use personagens com diferentes elementos.',img:'https://static-cdn.jtvnw.net/ttv-boxart/Genshin%20Impact.jpg',url:'https://genshin.hoyoverse.com/'},
+ {group:'Novos / atuais',name:'Zenless Zone Zero',year:'2024–',genre:'RPG • Ação',desc:'Uma aventura de ação ambientada em uma cidade futurista, com combate em equipe.',img:'https://images.pushsquare.com/74ad6de35e140/zenless-zone-zero-cover.cover_large.jpg',url:'https://zenless.hoyoverse.com/'},
+ {group:'Novos / atuais',name:'VALORANT',year:'2020–',genre:'Tiro tático • 5v5',desc:'Jogo competitivo por equipes com agentes que possuem habilidades próprias.',img:'https://static-cdn.jtvnw.net/ttv-boxart/Valorant.jpg',url:'https://playvalorant.com/pt-br/download/'},
+ {group:'Novos / atuais',name:'Fortnite',year:'2017–',genre:'Ação • Battle Royale',desc:'Experiências online, construção e partidas competitivas em um universo em constante mudança.',img:'https://static-cdn.jtvnw.net/ttv-boxart/Fortnite.jpg',url:'https://www.fortnite.com/download?lang=pt-BR'},
+ {group:'Novos / atuais',name:'League of Legends',year:'2009–',genre:'MOBA • 5v5',desc:'Duas equipes de cinco jogadores disputam partidas estratégicas usando campeões com habilidades únicas.',img:'https://static-cdn.jtvnw.net/ttv-boxart/League%20of%20Legends.jpg',url:'https://www.leagueoflegends.com/pt-br/download/'},
+ {group:'Clássicos',name:'Minecraft',year:'2011–',genre:'Sandbox • Sobrevivência',desc:'Construa, explore e crie seus próprios mundos em um sandbox de blocos.',img:'https://static-cdn.jtvnw.net/ttv-boxart/Minecraft.jpg',url:'https://www.minecraft.net/pt-br/download'},
+ {group:'Clássicos',name:'Roblox',year:'2006–',genre:'Plataforma • Multiplayer',desc:'Uma plataforma com milhões de experiências criadas pela comunidade.',img:'https://static-cdn.jtvnw.net/ttv-boxart/Roblox.jpg',url:'https://www.roblox.com/pt/download'},
+ {group:'Clássicos',name:'Stardew Valley',year:'2016',genre:'Simulação • Fazenda',desc:'Cuide de uma fazenda, explore cavernas, pesque e conheça os moradores do vale.',img:'https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg',url:'https://www.stardewvalley.net/'},
+ {group:'Clássicos',name:'Terraria',year:'2011',genre:'Sandbox • Aventura',desc:'Explore, construa e descubra um enorme mundo 2D cheio de possibilidades.',img:'https://cdn.cloudflare.steamstatic.com/steam/apps/105600/header.jpg',url:'https://www.terraria.org/'},
+ {group:'Clássicos',name:'Among Us',year:'2018',genre:'Party • Multiplayer',desc:'Trabalhe em equipe e tente descobrir quem está sabotando a tripulação.',img:'https://cdn.cloudflare.steamstatic.com/steam/apps/945360/header.jpg',url:'https://www.innersloth.com/games/among-us/'},
+ {group:'Antigos / consagrados',name:'Hollow Knight',year:'2017',genre:'Ação • Metroidvania',desc:'Explore o reino subterrâneo de Hallownest em uma aventura 2D desenhada à mão.',img:'https://cdn.cloudflare.steamstatic.com/steam/apps/367520/header.jpg',url:'https://www.hollowknight.com/'},
+ {group:'Antigos / consagrados',name:'Hades',year:'2020',genre:'Roguelike • Ação',desc:'Tente escapar do submundo em uma aventura com combate rápido e narrativa progressiva.',img:'https://cdn.cloudflare.steamstatic.com/steam/apps/1145360/header.jpg',url:'https://www.supergiantgames.com/games/hades/'},
+ {group:'Antigos / consagrados',name:'Celeste',year:'2018',genre:'Plataforma • Aventura',desc:'Ajude Madeline a subir a montanha Celeste em uma jornada de plataforma precisa.',img:'https://cdn.cloudflare.steamstatic.com/steam/apps/504230/header.jpg',url:'https://www.celestegame.com/'},
+ {group:'Antigos / consagrados',name:'Cuphead',year:'2017',genre:'Ação • Plataforma',desc:'Uma aventura com visual inspirado em animações clássicas e fases desafiadoras.',img:'https://cdn.cloudflare.steamstatic.com/steam/apps/268910/header.jpg',url:'https://www.cupheadgame.com/'},
+ {group:'Antigos / consagrados',name:'UNDERTALE',year:'2015',genre:'RPG • História',desc:'Um RPG em que suas escolhas mudam a forma como você enfrenta e conhece os personagens.',img:'https://cdn.cloudflare.steamstatic.com/steam/apps/391540/header.jpg',url:'https://undertale.com/'}
+];
 
-
-
-  function openCategory(id) {
-  document.getElementById('category-home').hidden = true;
-  document.querySelectorAll('.category-view').forEach(v => v.hidden = true);
-  document.getElementById(id).hidden = false;
-  document.querySelector('.hero').style.display = 'none';
-  window.scrollTo({top:0, behavior:'smooth'});
+function cardHTML(item,isGame){
+ const safe=encodeURIComponent(JSON.stringify(item));
+ return `<article class="card catalog-card"><div class="cover"><img src="${item.img}" alt="${item.name}" loading="lazy" onerror="this.style.display='none'"><span>${item.name}</span></div><div class="info"><h3>${item.name}</h3><p>${item.genre}</p><div class="card-meta">${item.year}</div><button class="details-btn" onclick='openDetail(decodeURIComponent("${safe}"),${isGame})'>Ver informações</button>${isGame?`<a class="download-btn" href="${item.url}" target="_blank" rel="noopener">🌐 Site oficial / baixar</a>`:''}</div></article>`;
 }
-function closeCategory() {
-  document.querySelectorAll('.category-view').forEach(v => v.hidden = true);
-  document.getElementById('category-home').hidden = false;
-  document.querySelector('.hero').style.display = '';
-  window.scrollTo({top:0, behavior:'smooth'});
+function renderCatalog(list,target,isGame){
+ const groups=[...new Set(list.map(x=>x.group))];
+ document.getElementById(target).innerHTML=groups.map(group=>`<section class="catalog-section"><div class="section-title"><div><h3>${isGame?'🎮':'🎌'} ${group}</h3><small>${list.filter(x=>x.group===group).length} títulos</small></div></div><div class="grid">${list.filter(x=>x.group===group).map(x=>cardHTML(x,isGame)).join('')}</div></section>`).join('');
 }
+function openDetail(encoded,isGame){const item=JSON.parse(encoded);document.getElementById('detailContent').innerHTML=`<div class="detail-top"><img src="${item.img}" alt="${item.name}" onerror="this.style.display='none'"><div><span class="tag">${isGame?'🎮 JOGO':'🎌 ANIME'} • ${item.group}</span><h2>${item.name}</h2><p>${item.desc}</p><div class="detail-actions">${isGame?`<a class="download-btn" href="${item.url}" target="_blank" rel="noopener">🌐 Ir ao site oficial</a>`:''}</div></div></div><div class="detail-info"><div class="detail-info-grid"><div class="detail-info-card"><b>ANO</b><span>${item.year}</span></div><div class="detail-info-card"><b>GÊNERO</b><span>${item.genre}</span></div><div class="detail-info-card"><b>CATEGORIA</b><span>${item.group}</span></div></div></div>`;document.getElementById('detailOverlay').hidden=false;}
+function closeDetail(){document.getElementById('detailOverlay').hidden=true;}
+document.getElementById('detailOverlay').addEventListener('click',e=>{if(e.target.id==='detailOverlay')closeDetail()});
 
-function showPage(id) {
-    document.querySelector('main').style.display = 'none';
-    document.querySelector('.hero').style.display = 'none';
-    document.querySelectorAll('.jjk-full-page').forEach(p => p.hidden = true);
-    document.getElementById(id).hidden = false;
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-  function hidePage(id) {
-    document.getElementById(id).hidden = true;
-    document.querySelector('main').style.display = '';
-    document.querySelector('.hero').style.display = '';
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-  function openOnePiece(){ showPage('onepiece-page'); }
-  function closeOnePiece(){ hidePage('onepiece-page'); }
-  function openGenshin(){ showPage('genshin-page'); }
-  function closeGenshin(){ hidePage('genshin-page'); }
+renderCatalog(animeData,'animeCatalog',false);renderCatalog(gameData,'gameCatalog',true);
 
-  function openHunter() {
-    document.querySelector('main').style.display = 'none';
-    document.querySelector('#hunter-page').hidden = false;
-    document.querySelector('.hero').style.display = 'none';
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-
-  function closeHunter() {
-    document.querySelector('#hunter-page').hidden = true;
-    document.querySelector('main').style.display = '';
-    document.querySelector('.hero').style.display = '';
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-
-  function closeJJK() {
-    document.querySelector('#jjk-page').hidden = true;
-    document.querySelector('main').style.display = '';
-    document.querySelector('.hero').style.display = '';
-    window.scrollTo({top: 0, behavior: 'smooth'});
-  }
-
-  const search = document.getElementById('search');
-  const clearSearch = document.getElementById('clearSearch');
-  const noResults = document.getElementById('noResults');
-
-  function doSearch() {
-    const term = search.value.trim().toLocaleLowerCase('pt-BR');
-    let visible = 0;
-
-    document.querySelectorAll('.card').forEach(card => {
-      const text = card.innerText.toLocaleLowerCase('pt-BR');
-      const match = !term || text.includes(term);
-      card.style.display = match ? '' : 'none';
-      if (match) visible++;
-    });
-
-    clearSearch.style.display = term ? 'block' : 'none';
-    noResults.style.display = term && visible === 0 ? 'block' : 'none';
-  }
-
-  search.addEventListener('input', doSearch);
-
-  clearSearch.addEventListener('click', () => {
-    search.value = '';
-    doSearch();
-    search.focus();
-  });
+const search=document.getElementById('search'),clearSearch=document.getElementById('clearSearch');
+search.addEventListener('input',()=>{const term=search.value.trim().toLocaleLowerCase('pt-BR');clearSearch.style.display=term?'block':'none';document.querySelectorAll('.catalog-card').forEach(card=>{card.style.display=!term||card.innerText.toLocaleLowerCase('pt-BR').includes(term)?'':'none';});});
+clearSearch.addEventListener('click',()=>{search.value='';search.dispatchEvent(new Event('input'));search.focus()});
 </script>
 
 </body>
